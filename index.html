@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KlinPro Express Laundry - Solusi Laundry Bersih, Wangi & Kilat</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              300: '#5eead4',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom scrollbar & subtle animations */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(20, 184, 166, 0.35);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(20, 184, 166, 0.6);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.6); }
+      70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(20, 184, 166, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+    }
+    .package-selected-ring {
+      animation: pulseRing 1.4s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-300 selection:bg-teal-500 selection:text-white">
+
+  <!-- ==================== TOAST NOTIFICATION CONTAINER ==================== -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- ==================== STICKY NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 bg-white/85 dark:bg-slate-900/85 backdrop-blur-lg border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo -->
+        <a href="#beranda" class="flex items-center gap-3 group focus:outline-none">
+          <img src="logo.jpg" alt="Logo" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl object-contain group-hover:scale-105 transition-transform">
+          <div>
+            <span class="brand-name-display block font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none">
+              KlinPro Express Laundry
+            </span>
+            <span class="text-[11px] font-medium text-teal-600 dark:text-teal-400 tracking-wide">
+              Higienis • Wangi • Tepat Waktu
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600 dark:text-slate-300">
+          <a href="#beranda" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Beranda</a>
+          <a href="#paket" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Layanan & Paket</a>
+          <a href="#kalkulator" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors flex items-center gap-1.5">
+            Kalkulator
+            <span id="nav-cart-badge" class="hidden px-1.5 py-0.5 text-[10px] font-bold bg-teal-100 text-teal-700 dark:bg-teal-900/60 dark:text-teal-300 rounded-full">0</span>
+          </a>
+          <a href="#lacak" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Lacak Order</a>
+          <a href="#testimoni" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Testimoni</a>
+          <a href="#lokasi" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Lokasi & FAQ</a>
+        </nav>
+
+        <!-- Right Action Buttons -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Store Status Pill (Desktop) -->
+          <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="store-status-text">Buka • 07.00 - 22.00</span>
+          </div>
+
+          <!-- Quick Order Button (Desktop/Tablet) -->
+          <a href="#kalkulator" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-sky-600 hover:from-teal-500 hover:to-sky-500 text-white text-sm font-bold shadow-md shadow-teal-600/20 active:scale-95 transition-all">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+            <span>Pesan Sekarang</span>
+          </a>
+
+          <!-- Settings Trigger Button -->
+          <button id="open-settings-btn" type="button" aria-label="Pengaturan Website" title="Pengaturan & Kustomisasi" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all active:scale-95">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+          </button>
+
+          <!-- Hamburger Menu Button (Mobile/Tablet) -->
+          <button id="open-mobile-menu-btn" type="button" aria-label="Buka Menu Navigasi" class="lg:hidden p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all active:scale-95">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE HAMBURGER DRAWER ==================== -->
+  <div id="mobile-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300"></div>
+  <aside id="mobile-drawer" class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-200 dark:border-slate-800 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+    <div>
+      <!-- Drawer Header -->
+      <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-sky-600 flex items-center justify-center text-white">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <span class="brand-name-display font-bold text-base text-slate-900 dark:text-white truncate max-w-[165px]">KlinPro Express Laundry</span>
+        </div>
+        <button id="close-mobile-menu-btn" type="button" aria-label="Tutup Menu" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-rose-100 hover:text-rose-600 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Real-time Store Status Card -->
+      <div class="p-4 mx-4 mt-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Status Operasional</span>
+          <span id="drawer-status-badge" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">BUKA SEKARANG</span>
+        </div>
+        <p id="drawer-live-clock" class="text-sm font-bold text-slate-800 dark:text-slate-100">Memuat waktu...</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Gratis jemput min. <span class="free-shipping-min-display font-semibold text-teal-600 dark:text-teal-400">Rp 25.000</span></p>
+      </div>
+
+      <!-- Drawer Navigation Links -->
+      <nav class="p-4 space-y-1.5">
+        <a href="#beranda" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i data-lucide="home" class="w-4 h-4 text-teal-500"></i>
+          <span>Beranda</span>
+        </a>
+        <a href="#paket" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i data-lucide="layers" class="w-4 h-4 text-teal-500"></i>
+          <span>Layanan & Paket Harga</span>
+        </a>
+        <a href="#kalkulator" class="mobile-nav-link flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <span class="flex items-center gap-3">
+            <i data-lucide="calculator" class="w-4 h-4 text-teal-500"></i>
+            <span>Kalkulator & Checkout</span>
+          </span>
+          <span id="drawer-cart-badge" class="px-2 py-0.5 text-xs font-bold bg-teal-600 text-white rounded-full">0 item</span>
+        </a>
+        <a href="#lacak" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i data-lucide="search-check" class="w-4 h-4 text-teal-500"></i>
+          <span>Lacak Status Cucian</span>
+        </a>
+        <a href="#testimoni" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i data-lucide="star" class="w-4 h-4 text-teal-500"></i>
+          <span>Testimoni Pelanggan</span>
+        </a>
+        <a href="#lokasi" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i data-lucide="map-pin" class="w-4 h-4 text-teal-500"></i>
+          <span>Lokasi & FAQ</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Drawer Footer Actions -->
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
+      <button id="drawer-open-settings-btn" type="button" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm font-semibold transition-colors">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+        <span>Pengaturan Website</span>
+      </button>
+      <a href="#kalkulator" class="mobile-nav-link w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-teal-600 to-sky-600 text-white text-sm font-bold shadow-lg shadow-teal-600/20">
+        <i data-lucide="send" class="w-4 h-4"></i>
+        <span>Hitung & Jemput Sekarang</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="beranda" class="relative overflow-hidden pt-10 pb-16 sm:pt-16 sm:pb-24">
+    <!-- Decorative Gradient Blobs -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-teal-400/20 dark:bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-20 -right-24 w-96 h-96 bg-sky-400/20 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        
+        <!-- Left Hero Content -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <!-- Promo Badge -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 dark:bg-teal-950/70 border border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300 text-xs sm:text-sm font-semibold mb-6">
+            <span class="px-2 py-0.5 rounded-full bg-teal-600 text-white text-[11px] font-bold">PROMO</span>
+            <span>Gunakan kode <strong>HEMAT10</strong> untuk diskon 10% hari ini!</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-5">
+            Cucian Bersih, Wangi & Rapi Tanpa Repot Keluar Rumah.
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8">
+            <span class="brand-name-display font-semibold text-slate-800 dark:text-slate-100">KlinPro Express Laundry</span> menghadirkan layanan cuci kiloan, satuan, sepatu, dan bedcover dengan teknologi deterjen anti-bakteri, 1 mesin 1 pelanggan, serta layanan antar-jemput cepat.
+          </p>
+
+          <!-- Primary & Secondary CTA Buttons -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 mb-10">
+            <a href="#paket" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-600 to-sky-600 hover:from-teal-500 hover:to-sky-500 text-white font-bold text-base shadow-xl shadow-teal-600/25 active:scale-95 transition-all">
+              <i data-lucide="calculator" class="w-5 h-5"></i>
+              <span>Hitung & Pesan Sekarang</span>
+            </a>
+            <a href="#lacak" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 font-bold text-base shadow-sm active:scale-95 transition-all">
+              <i data-lucide="package-search" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i>
+              <span>Cek Status Cucian</span>
+            </a>
+          </div>
+
+          <!-- Key Highlights / Stats -->
+          <div class="grid grid-cols-3 gap-3 sm:gap-6 pt-6 border-t border-slate-200/80 dark:border-slate-800">
+            <div>
+              <div class="flex items-center justify-center lg:justify-start gap-1.5 text-teal-600 dark:text-teal-400 font-extrabold text-xl sm:text-2xl">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+                <span>3 Jam</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Estimasi Kilat Selesai</p>
+            </div>
+            <div>
+              <div class="flex items-center justify-center lg:justify-start gap-1.5 text-sky-600 dark:text-sky-400 font-extrabold text-xl sm:text-2xl">
+                <i data-lucide="truck" class="w-5 h-5"></i>
+                <span>Gratis</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Antar-Jemput Kurir*</p>
+            </div>
+            <div>
+              <div class="flex items-center justify-center lg:justify-start gap-1.5 text-emerald-600 dark:text-emerald-400 font-extrabold text-xl sm:text-2xl">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span>100%</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Garansi Wangi & Rapi</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual Interactive Preview Card -->
+        <div class="lg:col-span-5">
+          <div class="relative mx-auto max-w-md">
+            <div class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-2xl shadow-slate-900/10 dark:shadow-black/40">
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                    <i data-lucide="washing-machine" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-bold text-slate-900 dark:text-white text-base">Simulasi Cepat</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Pilih paket & lihat estimasi langsung</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400">1 Mesin / Order</span>
+              </div>
+
+              <!-- Quick Highlight Steps -->
+              <div class="space-y-3.5 my-5">
+                <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60">
+                  <span class="w-7 h-7 rounded-lg bg-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">Pilih Paket Laundry</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Kiloan reguler, ekspres 3-6 jam, bedcover, hingga sepatu.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60">
+                  <span class="w-7 h-7 rounded-lg bg-sky-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">Hitung Otomatis di Kalkulator</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Gabungkan beberapa item, tambah parfum, & pakai kode promo.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">Pesan via WhatsApp & Lacak</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Dapatkan ID Order unik untuk memantau cucian secara real-time.</p>
+                  </div>
+                </div>
+                <a href="#paket" class="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-teal-600 dark:hover:bg-teal-500 text-white font-bold text-sm transition-all">
+                <span>Lihat Daftar Paket & Harga</span>
+                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+              </a>
+            </div>
+
+            <!-- Floating Badge -->
+            <div class="animate-float hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl absolute -bottom-5 -left-6">
+              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-900 dark:text-white">4.9 / 5.0 Rating</p>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">Dari 2.400+ pelanggan puas</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ==================== PILIHAN PAKET LAUNDRY INTERAKTIF ==================== -->
+  <section id="paket" class="py-16 sm:py-20 bg-white dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-block px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-3">
+          Layanan & Daftar Harga
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
+          Pilih Paket Laundry Sesuai Kebutuhan Anda
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          Klik <strong>"Pilih Paket Ini"</strong> pada kartu layanan di bawah untuk langsung menghitung estimasi biaya di Kalkulator Laundry.
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div id="package-filter-tabs" class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
+        <button type="button" data-filter="all" class="filter-tab active px-5 py-2.5 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-md shadow-teal-600/20 transition-all">
+          Semua Paket
+        </button>
+        <button type="button" data-filter="kiloan" class="filter-tab px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+          Kiloan Harian
+        </button>
+        <button type="button" data-filter="express" class="filter-tab px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+          Express Kilat
+        </button>
+        <button type="button" data-filter="satuan" class="filter-tab px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+          Satuan (Bedcover/Jas/Sepatu)
+        </button>
+      </div>
+
+      <!-- Packages Grid (Rendered via JS) -->
+      <div id="packages-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    </div>
+  </section>
+
+  <!-- ==================== KALKULATOR LAUNDRY & CHECKOUT SECTION ==================== -->
+  <section id="kalkulator" class="py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-block px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 text-xs font-bold uppercase tracking-wider mb-3">
+          Kalkulator Pintar & Pemesanan
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
+          Hitung Biaya Laundry & Pesan Penjemputan
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          Atur berat/jumlah cucian, tambahkan beberapa paket sekaligus, gunakan kode promo, lalu kirim pesanan langsung ke WhatsApp.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- LEFT COLUMN: CALCULATOR CONFIGURATOR & MULTI-ITEM CART -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Step 1: Paket & Jumlah -->
+          <div id="calculator-card" class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl shadow-slate-900/5 transition-all">
+            <div class="flex items-center justify-between gap-2 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-extrabold">1</div>
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">Pilih Paket & Jumlah Cucian</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Otomatis terisi saat Anda memilih paket di atas</p>
+                </div>
+              </div>
+              <span id="selected-pkg-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                Kiloan
+              </span>
+            </div>
+
+            <!-- Package Dropdown Selector -->
+            <div class="mb-5">
+              <label for="calc-package-select" class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">
+                Paket Layanan Aktif
+              </label>
+              <select id="calc-package-select" class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
+                <!-- Options populated by JS -->
+              </select>
+            </div>
+
+            <!-- Quantity / Weight Input & Quick Presets -->
+            <div class="grid sm:grid-cols-2 gap-5 items-end mb-6">
+              <div>
+                <label for="calc-qty-input" class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">
+                  Estimasi Berat / Jumlah (<span id="calc-unit-label" class="text-teal-600 dark:text-teal-400">kg</span>)
+                </label>
+                <div class="flex items-center rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5">
+                  <button id="qty-minus-btn" type="button" aria-label="Kurangi jumlah" class="w-11 h-11 rounded-xl bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold flex items-center justify-center shadow-sm active:scale-95 transition-all">
+                    <i data-lucide="minus" class="w-4 h-4"></i>
+                  </button>
+                  <input id="calc-qty-input" type="number" min="1" max="200" step="1" value="3" class="w-full text-center bg-transparent font-extrabold text-xl text-slate-900 dark:text-white focus:outline-none" />
+                  <button id="qty-plus-btn" type="button" aria-label="Tambah jumlah" class="w-11 h-11 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold flex items-center justify-center shadow-sm active:scale-95 transition-all">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Item Subtotal Preview + Add to Cart Button -->
+              <div class="flex flex-col justify-between bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-800/60 rounded-2xl p-3.5">
+                <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300 mb-1">
+                  <span>Estimasi Item Ini:</span>
+                  <span id="current-item-formula" class="font-medium">3 kg × Rp 7.000</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span id="current-item-subtotal" class="text-lg font-extrabold text-teal-700 dark:text-teal-300">Rp 21.000</span>
+                  <button id="add-to-cart-btn" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md shadow-teal-600/20 active:scale-95 transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Tambah ke Daftar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+               <!-- Quick Preset Pills -->
+            <div class="flex flex-wrap items-center gap-2 mb-6">
+              <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mr-1">Cepat pilih:</span>
+              <button type="button" data-preset="1" class="qty-preset-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-teal-100 dark:bg-slate-800 dark:hover:bg-teal-900/50 text-slate-700 dark:text-slate-300 transition-colors">1</button>
+              <button type="button" data-preset="3" class="qty-preset-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-teal-100 dark:bg-slate-800 dark:hover:bg-teal-900/50 text-slate-700 dark:text-slate-300 transition-colors">3</button>
+              <button type="button" data-preset="5" class="qty-preset-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-teal-100 dark:bg-slate-800 dark:hover:bg-teal-900/50 text-slate-700 dark:text-slate-300 transition-colors">5</button>
+              <button type="button" data-preset="10" class="qty-preset-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-teal-100 dark:bg-slate-800 dark:hover:bg-teal-900/50 text-slate-700 dark:text-slate-300 transition-colors">10</button>
+            </div>
+
+            <!-- Multi-Item Cart List -->
+            <div class="rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 p-4 mb-6">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <i data-lucide="shopping-bag" class="w-4 h-4 text-teal-600 dark:text-teal-400"></i>
+                  <span>Daftar Item Cucian Anda</span>
+                </h4>
+                <button id="clear-cart-btn" type="button" class="hidden text-xs font-semibold text-rose-600 hover:text-rose-500">
+                  Kosongkan Daftar
+                </button>
+              </div>
+              <div id="cart-items-container" class="space-y-2.5">
+                <!-- Rendered by JS -->
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-3">
+                *Jika daftar di atas kosong, kalkulator otomatis menghitung paket aktif yang sedang dipilih di atas.
+              </p>
+            </div>
+
+            <!-- Add-ons Checkboxes -->
+            <div class="mb-6">
+              <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-3">Layanan Tambahan (Opsional)</h4>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 cursor-pointer bg-white dark:bg-slate-800/40 transition-all">
+                  <input type="checkbox" id="addon-parfum" value="3000" class="addon-checkbox mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-800 dark:text-slate-100">Parfum Sakura</span>
+                      <span class="text-xs font-bold text-teal-600 dark:text-teal-400">+Rp 3.000</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Wangi tahan lama hingga 14 hari</p>
+                  </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 cursor-pointer bg-white dark:bg-slate-800/40 transition-all">
+                  <input type="checkbox" id="addon-softener" value="2000" class="addon-checkbox mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-800 dark:text-slate-100">Pelembut Ekstra</span>
+                      <span class="text-xs font-bold text-teal-600 dark:text-teal-400">+Rp 2.000</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Serat kain lebih lembut & mudah disetrika</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+              <!-- Delivery Method & Promo Code -->
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Metode Layanan</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="delivery-method" value="kurir" checked class="peer sr-only" />
+                    <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 peer-checked:border-teal-600 peer-checked:bg-teal-50/70 dark:peer-checked:bg-teal-950/50 text-center transition-all">
+                      <i data-lucide="truck" class="w-4 h-4 mx-auto mb-1 text-teal-600 dark:text-teal-400"></i>
+                      <span class="block text-xs font-bold text-slate-800 dark:text-slate-100">Antar-Jemput</span>
+                      <span class="block text-[10px] text-slate-500 dark:text-slate-400">Rp 5.000 / Gratis*</span>
+                    </div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="delivery-method" value="outlet" class="peer sr-only" />
+                    <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 peer-checked:border-teal-600 peer-checked:bg-teal-50/70 dark:peer-checked:bg-teal-950/50 text-center transition-all">
+                      <i data-lucide="store" class="w-4 h-4 mx-auto mb-1 text-sky-600 dark:text-sky-400"></i>
+                      <span class="block text-xs font-bold text-slate-800 dark:text-slate-100">Ke Outlet</span>
+                      <span class="block text-[10px] text-slate-500 dark:text-slate-400">Gratis Ongkir</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="promo-code-input" class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Kode Promo</label>
+                <div class="flex gap-2">
+                  <input type="text" id="promo-code-input" placeholder="HEMAT10 / BARU5000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold uppercase text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+                  <button type="button" id="apply-promo-btn" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-teal-600 dark:hover:bg-teal-500 text-white text-xs font-bold shrink-0 active:scale-95 transition-all">
+                    Terapkan
+                  </button>
+                </div>
+                <p id="promo-feedback-msg" class="text-xs mt-1.5 text-slate-500 dark:text-slate-400">
+                  Coba: <button type="button" class="quick-promo-fill underline font-semibold text-teal-600 dark:text-teal-400" data-code="HEMAT10">HEMAT10</button> atau <button type="button" class="quick-promo-fill underline font-semibold text-teal-600 dark:text-teal-400" data-code="BARU5000">BARU5000</button>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: SUMMARY & CHECKOUT FORM -->
+        <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+          
+          <!-- Cost Summary Card -->
+          <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950 text-white p-6 sm:p-7 shadow-2xl">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+              <h3 class="text-lg font-extrabold flex items-center gap-2">
+                <i data-lucide="receipt" class="w-5 h-5 text-teal-400"></i>
+                <span>Rincian Estimasi Biaya</span>
+              </h3>
+              <span id="summary-item-count" class="px-2.5 py-1 rounded-full bg-white/10 text-xs font-bold text-teal-300">1 Item</span>
+            </div>
+
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between text-slate-300">
+                <span>Subtotal Cucian</span>
+                <span id="summary-subtotal" class="font-bold text-white">Rp 21.000</span>
+              </div>
+              <div class="flex justify-between text-slate-300">
+                <span>Layanan Tambahan (Add-on)</span>
+                <span id="summary-addons" class="font-bold text-white">Rp 0</span>
+              </div>
+              <div class="flex justify-between text-slate-300">
+                <div>
+                  <span>Biaya Antar-Jemput</span>
+                  <span id="free-shipping-hint" class="block text-[11px] text-teal-300">Gratis min. Rp 25.000</span>
+                </div>
+                <span id="summary-shipping" class="font-bold text-white">Rp 5.000</span>
+              </div>
+              <div id="summary-discount-row" class="hidden flex justify-between text-emerald-400">
+                <span>Diskon Promo (<span id="summary-promo-label"></span>)</span>
+                <span id="summary-discount" class="font-bold">-Rp 0</span>
+              </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-t border-white/15 flex items-end justify-between">
+              <div>
+                <span class="block text-xs text-slate-400">Total Estimasi Pembayaran</span>
+                <span class="text-[11px] text-teal-300">Bayar saat selesai / COD Kurir</span>
+              </div>
+              <span id="summary-grand-total" class="text-2xl sm:text-3xl font-extrabold text-teal-400">Rp 26.000</span>
+            </div>
+          </div>
+
+           <!-- Checkout Customer Form -->
+          <form id="checkout-form" class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xl shadow-slate-900/5 space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div class="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center font-extrabold text-sm">2</div>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Data Pelanggan & Penjemputan</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Lengkapi data untuk mengirim order via WhatsApp</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="cust-name" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Lengkap *</label>
+              <input type="text" id="cust-name" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="cust-phone" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">No. WhatsApp Anda *</label>
+                <input type="tel" id="cust-phone" required placeholder="081234567890" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+              </div>
+              <div>
+                <label for="cust-schedule" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Jadwal Jemput</label>
+                <select id="cust-schedule" class="w-full px-3.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none">
+                  <option value="Secepatnya (30-60 Menit)">Secepatnya (30-60 Menit)</option>
+                  <option value="Hari Ini - Pagi (08.00 - 11.00)">Hari Ini - Pagi (08.00 - 11.00)</option>
+                  <option value="Hari Ini - Siang (13.00 - 16.00)">Hari Ini - Siang (13.00 - 16.00)</option>
+                  <option value="Hari Ini - Malam (18.00 - 21.00)">Hari Ini - Malam (18.00 - 21.00)</option>
+                  <option value="Besok Pagi">Besok Pagi</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="cust-address" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Alamat Lengkap / Patokan *</label>
+              <textarea id="cust-address" rows="2" required placeholder="Jl. Merdeka No. 12, Blok B (Sebelah Minimarket)" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none"></textarea>
+            </div>
+
+            <div>
+              <label for="cust-notes" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Catatan Khusus (Opsional)</label>
+              <input type="text" id="cust-notes" placeholder="Misal: Pisahkan pakaian putih, jangan disetrika terlalu panas" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+            </div>
+
+            <button type="submit" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2.5 active:scale-95 transition-all">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+              <span>Pesan Sekarang via WhatsApp</span>
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LACAK ORDER (ORDER TRACKER) ==================== -->
+  <section id="lacak" class="py-16 sm:py-20 bg-white dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800/80">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-10">
+        <span class="inline-block px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-3">
+          Real-Time Tracking
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
+          Lacak Status Cucian Anda
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          Masukkan ID Order yang Anda dapatkan saat pemesanan untuk melihat progres pencucian secara langsung.
+        </p>
+      </div>
+
+      <!-- Search Box -->
+      <div class="rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-lg">
+        <form id="track-order-form" class="flex flex-col sm:flex-row gap-3 mb-4">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="track-order-input" placeholder="Masukkan ID Order (Contoh: ORD-1001)" class="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-bold uppercase text-sm focus:ring-2 focus:ring-teal-500 outline-none" />
+          </div>
+          <button type="submit" class="px-7 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm shadow-md shadow-teal-600/20 active:scale-95 transition-all">
+            Cek Status
+          </button>
+        </form>
+
+        <!-- Sample Order IDs Pills -->
+        <div id="sample-orders-bar" class="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+          <span>ID Order Tersedia:</span>
+          <button type="button" data-order-id="ORD-1001" class="sample-track-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-teal-600 dark:text-teal-400 hover:border-teal-500 transition-colors">ORD-1001</button>
+          <button type="button" data-order-id="ORD-1002" class="sample-track-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-teal-600 dark:text-teal-400 hover:border-teal-500 transition-colors">ORD-1002</button>
+        </div>
+
+        <!-- Tracking Result Container -->
+        <div id="track-result-container" class="hidden mt-7 pt-7 border-t border-slate-200 dark:border-slate-800"></div>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- ==================== KEUNGGULAN & TESTIMONI ==================== -->
+  <section id="testimoni" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Why Choose Us -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-4">
+            <i data-lucide="shield" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-extrabold text-base text-slate-900 dark:text-white mb-1.5">1 Mesin 1 Pelanggan</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Pakaian Anda tidak pernah dicampur dengan milik pelanggan lain sehingga lebih higienis & tidak tertukar.</p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-4">
+            <i data-lucide="droplets" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-extrabold text-base text-slate-900 dark:text-white mb-1.5">Deterjen Ramah Lingkungan</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Menggunakan deterjen cair premium anti-bakteri yang aman untuk kulit bayi maupun pakaian sensitif.</p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
+            <i data-lucide="wind" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-extrabold text-base text-slate-900 dark:text-white mb-1.5">Setrika Uap Boiler</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Hasil setrika jauh lebih licin, rapi, bebas kilap panas, dan menjaga keawetan serat kain.</p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+            <i data-lucide="clock-check" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-extrabold text-base text-slate-900 dark:text-white mb-1.5">Garansi Tepat Waktu</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Komitmen selesai sesuai estimasi paket pilihan Anda, mulai dari layanan kilat 3 jam.</p>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="inline-block px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+          Apa Kata Mereka?
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+          Dipercaya Ribuan Keluarga & Mahasiswa
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center gap-1 text-amber-400 mb-3">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+            "Suka banget sama fitur kalkulator di websitenya, jadi tahu estimasi biaya sebelum kurir datang. Hasil setrika uapnya rapi banget dan parfum Sakuranya awet!"
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-teal-600 text-white font-bold flex items-center justify-center text-sm">AN</div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Anisa Rahmawati</h4>
+              <p class="text-xs text-slate-500">Karyawan Swasta</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center gap-1 text-amber-400 mb-3">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+            "Paket Express 3 Jam penyelamat banget pas besok pagi harus dinas luar kota dan kemeja belum dicuci. Kurirnya ramah dan tepat waktu."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm">DP</div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Dimas Pratama</h4>
+              <p class="text-xs text-slate-500">Konsultan IT</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center gap-1 text-amber-400 mb-3">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+            "Cuci bedcover king size dan sepatu sneakers di sini hasilnya bersih total kayak baru lagi. Bisa lacak status order langsung dari HP juga."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm">SN</div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Siti Nurhaliza</h4>
+              <p class="text-xs text-slate-500">Ibu Rumah Tangga</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+     <!-- ==================== FAQ AKORDEON & LOKASI OUTLET ==================== -->
+  <section id="lokasi" class="py-16 sm:py-20 bg-white dark:bg-slate-900/50 border-t border-slate-200/70 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-10">
+        
+        <!-- FAQ Accordion -->
+        <div class="lg:col-span-7">
+          <span class="inline-block px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-3">
+            Pertanyaan Umum (FAQ)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">
+            Hal yang Sering Ditanyakan
+          </h2>
+
+          <div class="space-y-3" id="faq-accordion">
+            <!-- FAQ 1 -->
+            <div class="faq-item rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 overflow-hidden">
+              <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                <span>Bagaimana cara kerja gratis ongkir antar-jemput?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-teal-600 transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Layanan antar-jemput kurir otomatis GRATIS untuk setiap pemesanan dengan minimal transaksi <span class="free-shipping-min-display font-bold text-teal-600 dark:text-teal-400">Rp 25.000</span> dalam radius 5 km dari outlet kami. Di bawah nominal tersebut, biaya kurir hanya Rp 5.000 pulang-pergi.
+              </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-item rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 overflow-hidden">
+              <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                <span>Apakah cucian kiloan dicampur dengan pelanggan lain?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-teal-600 transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Tidak pernah! Kami menerapkan standar <strong>1 Mesin 1 Pelanggan</strong>. Setiap pesanan memiliki keranjang dan tag khusus dari proses penimbangan, pencucian, pengeringan, hingga pengemasan.
+              </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-item rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 overflow-hidden">
+              <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                <span>Bagaimana jika berat asli berbeda dengan estimasi di kalkulator?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-teal-600 transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Kurir kami membawa timbangan digital portabel saat penjemputan atau menimbangnya di outlet dengan foto bukti timbangan yang dikirimkan ke WhatsApp Anda. Pembayaran disesuaikan dengan berat aktual yang tercatat.
+              </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-item rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 overflow-hidden">
+              <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                <span>Metode pembayaran apa saja yang diterima?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-teal-600 transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Kami menerima pembayaran Tunai (COD saat cucian diantar), QRIS (GoPay, OVO, DANA, ShopeePay, Mobile Banking), serta Transfer Bank (BCA, Mandiri, BRI, BNI).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outlet Info Card -->
+        <div class="lg:col-span-5">
+          <div class="rounded-3xl bg-gradient-to-br from-teal-600 to-sky-700 text-white p-7 sm:p-8 shadow-xl h-full flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-bold uppercase tracking-wider mb-4">
+                Outlet Utama & Kontak
+              </span>
+              <h3 class="brand-name-display text-2xl font-extrabold mb-2">KlinPro Express Laundry</h3>
+              <p class="text-teal-100 text-sm mb-6">Siap melayani kebutuhan kebersihan pakaian Anda setiap hari dengan sepenuh hati.</p>
+
+              <div class="space-y-4 text-sm">
+                <div class="flex items-start gap-3">
+                  <i data-lucide="map-pin" class="w-5 h-5 text-teal-200 shrink-0 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">Alamat Outlet</p>
+                    <p class="text-teal-100 text-xs mt-0.5">Jl. Sudirman Kav. 45, Ruko Harmoni No. 8, Jakarta Selatan</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i data-lucide="clock" class="w-5 h-5 text-teal-200 shrink-0 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">Jam Operasional</p>
+                    <p class="text-teal-100 text-xs mt-0.5">Senin - Minggu: 07.00 - 22.00 WIB</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i data-lucide="phone" class="w-5 h-5 text-teal-200 shrink-0 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">WhatsApp Customer Service</p>
+                    <p id="outlet-wa-display" class="text-teal-100 text-xs mt-0.5">+62 812-3456-7890</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/15 flex flex-col sm:flex-row gap-3">
+              <button id="direct-wa-cs-btn" type="button" class="flex-1 py-3 px-4 rounded-xl bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>Chat CS WhatsApp</span>
+              </button>
+              <a href="#kalkulator" class="flex-1 py-3 px-4 rounded-xl bg-slate-900/40 hover:bg-slate-900/60 text-white font-bold text-sm flex items-center justify-center gap-2 border border-white/20 transition-all">
+                <i data-lucide="calculator" class="w-4 h-4"></i>
+                <span>Hitung Biaya</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+     <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+        </div>
+        <span class="brand-name-display font-bold text-white text-base">KlinPro Express Laundry</span>
+      </div>
+      <p class="text-xs text-center sm:text-left">
+        &copy; <span id="footer-year">2026</span> <span class="brand-name-display">KlinPro Express Laundry</span>. Seluruh hak cipta dilindungi.
+      </p>
+      <button id="back-to-top-btn" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors">
+        <span>Ke Atas</span>
+        <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL 1: PENGATURAN / SETTINGS ==================== -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Pengaturan Website</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Sesuaikan tampilan & konfigurasi toko secara live</p>
+          </div>
+        </div>
+        <button id="close-settings-btn" type="button" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-rose-600 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        
+        <!-- Theme Toggle -->
+        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-indigo-950 text-amber-600 dark:text-indigo-400 flex items-center justify-center">
+              <i id="theme-icon-indicator" data-lucide="sun" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-slate-900 dark:text-white">Mode Gelap (Dark Mode)</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Nyaman dilihat di malam hari</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="setting-dark-mode" class="sr-only peer" />
+            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+          </label>
+        </div>
+
+        <!-- Toast Preference Toggle -->
+        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+              <i data-lucide="bell-ring" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-slate-900 dark:text-white">Notifikasi Toast Interaktif</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Tampilkan pesan popup saat memilih paket</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="setting-toast-enabled" checked class="sr-only peer" />
+            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+          </label>
+        </div>
+
+        <!-- Live Brand & Admin Customization -->
+        <div class="space-y-4 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <p class="text-xs font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">Kustomisasi Identitas Laundry</p>
+          
+          <div>
+            <label for="setting-brand-name" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Brand Laundry</label>
+            <input type="text" id="setting-brand-name" value="KlinPro Express Laundry" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="setting-wa-number" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">No. WhatsApp Admin (62...)</label>
+              <input type="text" id="setting-wa-number" value="6281234567890" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+            </div>
+            <div>
+              <label for="setting-free-shipping" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Min. Gratis Ongkir (Rp)</label>
+              <input type="number" id="setting-free-shipping" step="5000" min="0" value="25000" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+        <button id="reset-settings-btn" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors">
+          Reset Default
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="cancel-settings-btn" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition-colors">
+            Batal
+          </button>
+          <button id="save-settings-btn" type="button" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white shadow-md shadow-teal-600/20 transition-all">
+            Simpan Pengaturan
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+      <!-- ==================== MODAL 2: KONFIRMASI ORDER & STRUK DIGITAL ==================== -->
+  <div id="receipt-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full shadow-2xl overflow-hidden">
+      <div class="p-6 text-center bg-gradient-to-br from-emerald-600 to-teal-600 text-white">
+        <div class="w-14 h-14 rounded-2xl bg-white/20 mx-auto flex items-center justify-center mb-3">
+          <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-xl font-extrabold">Pesanan Berhasil Dibuat!</h3>
+        <p class="text-xs text-emerald-100 mt-1">ID Order Anda telah tersimpan & siap dilacak</p>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 text-xs font-mono space-y-1.5 text-slate-700 dark:text-slate-200" id="digital-receipt-preview">
+          <!-- Receipt populated by JS -->
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <button id="copy-receipt-btn" type="button" class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Salin Struk</span>
+          </button>
+          <button id="track-created-order-btn" type="button" class="py-3 px-4 rounded-xl bg-teal-50 hover:bg-teal-100 dark:bg-teal-950/60 dark:hover:bg-teal-900/60 text-teal-700 dark:text-teal-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors">
+            <i data-lucide="search-check" class="w-4 h-4"></i>
+            <span>Lacak Order Ini</span>
+          </button>
+        </div>
+
+        <a id="reopen-wa-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all">
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+          <span>Buka Chat WhatsApp Admin</span>
+        </a>
+
+        <button id="close-receipt-modal-btn" type="button" class="w-full py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+          Tutup Jendela Ini
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. INITIALIZE DATA & DEFAULT SETTINGS
+      const DEFAULT_SETTINGS = {
+        brandName: 'KlinPro Express Laundry',
+        waNumber: '6281234567890',
+        freeShippingMin: 25000,
+        darkMode: false,
+        toastEnabled: true
+      };
+
+      const LAUNDRY_PACKAGES = [
+        {
+          id: 'pkg-reguler',
+          name: 'Cuci Komplit Reguler',
+          category: 'kiloan',
+          categoryLabel: 'Kiloan',
+          price: 7000,
+          unit: 'kg',
+          duration: '2 Hari (48 Jam)',
+          badge: 'Terlaris',
+          icon: 'shirt',
+          features: ['Cuci bersih + kering 100%', 'Setrika uap rapi & wangi', '1 mesin 1 pelanggan']
+        },
+        {
+          id: 'pkg-lipat-express',
+          name: 'Cuci Lipat Ekspres',
+          category: 'express',
+          categoryLabel: 'Express',
+          price: 12000,
+          unit: 'kg',
+          duration: '6 Jam Selesai',
+          badge: 'Cepat',
+          icon: 'zap',
+          features: ['Selesai di hari yang sama', 'Lipat rapi siap masuk lemari', 'Deterjen anti-bakteri']
+        },
+        {
+          id: 'pkg-kilat-3jam',
+          name: 'Cuci Setrika Kilat 3 Jam',
+          category: 'express',
+          categoryLabel: 'Express',
+          price: 15000,
+          unit: 'kg',
+          duration: '3 Jam Selesai',
+          badge: 'Super Kilat',
+          icon: 'flame',
+          features: ['Prioritas mesin utama', 'Cuci, kering & setrika uap', 'Gratis parfum pilihan']
+        },
+        {
+          id: 'pkg-bedcover',
+          name: 'Bedcover & Selimut Besar',
+          category: 'satuan',
+          categoryLabel: 'Satuan',
+          price: 35000,
+          unit: 'pcs',
+          duration: '2 Hari',
+          badge: 'Higienis',
+          icon: 'bed-double',
+          features: ['Mesin kapasitas besar 20kg', 'Bebas tungau & apek', 'Kemasan tas plastik tebal']
+        },
+        {
+          id: 'pkg-sepatu',
+          name: 'Cuci Sepatu Deep Clean',
+          category: 'satuan',
+          categoryLabel: 'Satuan',
+          price: 30000,
+          unit: 'pasang',
+          duration: '1-2 Hari',
+          badge: 'Perawatan Khusus',
+          icon: 'footprints',
+          features: ['Cairan pembersih khusus sepatu', 'Pembersihan insole, midsole & tali', 'Deodorizer anti bau']
+        },
+        {
+          id: 'pkg-jas',
+          name: 'Dry Clean Jas / Kebaya',
+          category: 'satuan',
+          categoryLabel: 'Satuan',
+          price: 40000,
+          unit: 'pcs',
+          duration: '2 Hari',
+          badge: 'Premium',
+          icon: 'award',
+          features: ['Perawatan serat kain sensitif', 'Steamer khusus tanpa merusak bahan', 'Gratis hanger & cover jas']
+        }
+      ];
+
+      const PROMO_CODES = {
+        'HEMAT10': { type: 'percent', value: 10, label: 'Diskon 10%' },
+        'BARU5000': { type: 'fixed', value: 5000, label: 'Potongan Rp 5.000' }
+      };
+
+      const SAMPLE_ORDERS = {
+        'ORD-1001': {
+          id: 'ORD-1001',
+          customerName: 'Rina Kusuma',
+          itemsSummary: 'Cuci Komplit Reguler (5 kg)',
+          total: 35000,
+          step: 2, // 0: Penjemputan, 1: Proses Cuci, 2: Setrika & Packing, 3: Siap Diantar/Selesai
+          updatedAt: 'Hari ini, 10:30 WIB'
+        },
+        'ORD-1002': {
+          id: 'ORD-1002',
+          customerName: 'Fajar Nugroho',
+          itemsSummary: 'Cuci Setrika Kilat 3 Jam (3 kg) + Bedcover (1 pcs)',
+          total: 80000,
+          step: 3,
+          updatedAt: 'Hari ini, 11:15 WIB'
+        }
+      };
+
+      // Load state from localStorage
+      let settings = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem('klinpro_settings') || '{}') };
+      let savedOrders = { ...SAMPLE_ORDERS, ...JSON.parse(localStorage.getItem('klinpro_orders') || '{}') };
+      let selectedPackageId = LAUNDRY_PACKAGES[0].id;
+      let cartItems = []; // Array of { pkgId, name, price, unit, qty }
+      let activePromo = null;
+      let currentFilter = 'all';
+      let lastCreatedReceiptText = '';
+      let lastCreatedOrderId = '';
+
+      // 2. UTILITY FUNCTIONS
+      const formatRupiah = (num) => 'Rp ' + Math.round(num).toLocaleString('id-ID');
+
+      function showToast(message, type = 'success') {
+        if (!settings.toastEnabled) return;
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const colors = {
+          success: 'bg-slate-900 dark:bg-slate-800 text-white border-teal-500',
+          info: 'bg-sky-900 text-white border-sky-400',
+          error: 'bg-rose-900 text-white border-rose-500'
+        };
+        const icons = {
+          success: 'check-circle-2',
+          info: 'info',
+          error: 'alert-circle'
+        };
+
+        toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl shadow-2xl border-l-4 ${colors[type] || colors.success} transform transition-all duration-300 translate-y-4 opacity-0`;
+        toast.innerHTML = `
+          <i data-lucide="${icons[type] || 'check-circle-2'}" class="w-5 h-5 text-teal-400 shrink-0"></i>
+          <p class="text-xs sm:text-sm font-semibold leading-snug">${message}</p>
+        `;
+        container.appendChild(toast);
+        lucide.createIcons();
+
+        requestAnimationFrame(() => {
+          toast.classList.remove('translate-y-4', 'opacity-0');
+        });
+
+        setTimeout(() => {
+          toast.classList.add('translate-y-4', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 3200);
+      }
+
+      // 3. APPLY SETTINGS & THEME TO UI
+      function applySettingsToUI() {
+        // Dark Mode
+        const htmlEl = document.documentElement;
+        if (settings.darkMode) {
+          htmlEl.classList.add('dark');
+        } else {
+          htmlEl.classList.remove('dark');
+        }
+
+        // Brand Name
+        document.title = `${settings.brandName} - Solusi Laundry Bersih, Wangi & Kilat`;
+        document.querySelectorAll('.brand-name-display').forEach(el => {
+          el.textContent = settings.brandName;
+        });
+
+        // Free Shipping Minimum Display
+        document.querySelectorAll('.free-shipping-min-display').forEach(el => {
+          el.textContent = formatRupiah(settings.freeShippingMin);
+        });
+        document.getElementById('free-shipping-hint').textContent = `Gratis min. ${formatRupiah(settings.freeShippingMin)}`;
+
+        // WhatsApp Display
+        const formattedWa = settings.waNumber.startsWith('62')
+          ? '+' + settings.waNumber.slice(0, 2) + ' ' + settings.waNumber.slice(2, 5) + '-' + settings.waNumber.slice(5, 9) + '-' + settings.waNumber.slice(9)
+          : settings.waNumber;
+        document.getElementById('outlet-wa-display').textContent = formattedWa;
+
+        // Sync Settings Modal Inputs
+        document.getElementById('setting-dark-mode').checked = settings.darkMode;
+        document.getElementById('setting-toast-enabled').checked = settings.toastEnabled;
+        document.getElementById('setting-brand-name').value = settings.brandName;
+        document.getElementById('setting-wa-number').value = settings.waNumber;
+        document.getElementById('setting-free-shipping').value = settings.freeShippingMin;
+
+        const themeIcon = document.getElementById('theme-icon-indicator');
+        if (themeIcon) {
+          themeIcon.setAttribute('data-lucide', settings.darkMode ? 'moon' : 'sun');
+          lucide.createIcons();
+        }
+
+        updateCalculator();
+      }
+
+      // 4. REAL-TIME STORE STATUS & CLOCK
+      function updateLiveClockAndStatus() {
+        const now = new Date();
+        const hour = now.getHours();
+        const isOpen = hour >= 7 && hour < 22;
+        const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short' });
+
+        document.getElementById('drawer-live-clock').textContent = `${dayStr}, ${timeStr} WIB`;
+        const badge = document.getElementById('drawer-status-badge');
+        if (isOpen) {
+          badge.textContent = 'BUKA SEKARANG';
+          badge.className = 'px-2 py-0.5 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300';
+        } else {
+          badge.textContent = 'TUTUP (BUKA 07.00)';
+          badge.className = 'px-2 py-0.5 text-[11px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300';
+        }
+      }
+      updateLiveClockAndStatus();
+      setInterval(updateLiveClockAndStatus, 30000);
+
+      // 5. RENDER PACKAGES & HANDLE PACKAGE SELECTION
+      function renderPackages() {
+        const grid = document.getElementById('packages-grid');
+        const filtered = currentFilter === 'all'
+          ? LAUNDRY_PACKAGES
+          : LAUNDRY_PACKAGES.filter(p => p.category === currentFilter);
+
+        grid.innerHTML = filtered.map(pkg => {
+          const isSelected = pkg.id === selectedPackageId;
+          return `
+            <div class="group rounded-3xl bg-white dark:bg-slate-900 border-2 ${isSelected ? 'border-teal-500 shadow-xl shadow-teal-500/10' : 'border-slate-200/90 dark:border-slate-800 hover:border-teal-400'} p-6 flex flex-col justify-between transition-all duration-300">
+              <div>
+                <div class="flex items-start justify-between gap-3 mb-4">
+                  <div class="w-12 h-12 rounded-2xl ${isSelected ? 'bg-teal-600 text-white' : 'bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400'} flex items-center justify-center transition-colors">
+                    <i data-lucide="${pkg.icon}" class="w-6 h-6"></i>
+                  </div>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold ${isSelected ? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}">
+                    ${pkg.badge}
+                  </span>
+                </div>
+
+                <h3 class="text-lg font-extrabold text-slate-900 dark:text-white mb-1">${pkg.name}</h3>
+                <p class="text-xs font-semibold text-sky-600 dark:text-sky-400 flex items-center gap-1.5 mb-4">
+                  <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                  <span>Estimasi: ${pkg.duration}</span>
+                </p>
+
+                <div class="mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <span class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">${formatRupiah(pkg.price)}</span>
+                  <span class="text-xs font-semibold text-slate-500 dark:text-slate-400"> / ${pkg.unit}</span>
+                </div>
+
+                <ul class="space-y-2.5 mb-6">
+                  ${pkg.features.map(f => `
+                    <li class="flex items-center gap-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                      <i data-lucide="check" class="w-4 h-4 text-teal-500 shrink-0"></i>
+                      <span>${f}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <button type="button" data-select-pkg="${pkg.id}" class="select-package-btn w-full py-3.5 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95 ${
+                isSelected
+                  ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/25'
+                  : 'bg-slate-900 hover:bg-teal-600 dark:bg-slate-800 dark:hover:bg-teal-600 text-white'
+              }">
+                <i data-lucide="${isSelected ? 'check-circle' : 'calculator'}" class="w-4 h-4"></i>
+                <span>${isSelected ? 'Paket Dipilih • Hitung Sekarang' : 'Pilih Paket Ini'}</span>
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+
+        // Bind select buttons
+        document.querySelectorAll('.select-package-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const pkgId = btn.getAttribute('data-select-pkg');
+            selectPackageForCalculator(pkgId, true);
+          });
+        });
+      }
+
+      function populatePackageDropdown() {
+        const select = document.getElementById('calc-package-select');
+        select.innerHTML = LAUNDRY_PACKAGES.map(pkg => `
+          <option value="${pkg.id}">${pkg.name} — ${formatRupiah(pkg.price)}/${pkg.unit} (${pkg.duration})</option>
+        `).join('');
+        select.value = selectedPackageId;
+      }
+
+      function selectPackageForCalculator(pkgId, shouldScroll = false) {
+        selectedPackageId = pkgId;
+        const pkg = LAUNDRY_PACKAGES.find(p => p.id === pkgId);
+        if (!pkg) return;
+
+        document.getElementById('calc-package-select').value = pkgId;
+        document.getElementById('selected-pkg-badge').textContent = pkg.categoryLabel;
+        document.getElementById('calc-unit-label').textContent = pkg.unit;
+
+        // Default sensible qty when switching between kiloan and satuan
+        const qtyInput = document.getElementById('calc-qty-input');
+        if (pkg.unit === 'pcs' || pkg.unit === 'pasang') {
+          qtyInput.value = 1;
+        } else if (parseInt(qtyInput.value, 10) < 1) {
+          qtyInput.value = 3;
+        }
+
+        renderPackages();
+        updateCalculator();
+
+        if (shouldScroll) {
+          showToast(`Paket "${pkg.name}" dipilih di Kalkulator!`, 'success');
+          const calcSection = document.getElementById('kalkulator');
+          const calcCard = document.getElementById('calculator-card');
+          calcSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          calcCard.classList.remove('package-selected-ring');
+          void calcCard.offsetWidth; // trigger reflow
+          calcCard.classList.add('package-selected-ring');
+        }
+      }
+
+      // Filter Tabs Event
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          currentFilter = tab.getAttribute('data-filter');
+          document.querySelectorAll('.filter-tab').forEach(t => {
+            t.className = 'filter-tab px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all';
+          });
+          tab.className = 'filter-tab active px-5 py-2.5 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-md shadow-teal-600/20 transition-all';
+          renderPackages();
+        });
+      });
+
+       // 6. CALCULATOR & MULTI-ITEM CART LOGIC
+      function renderCartItems() {
+        const container = document.getElementById('cart-items-container');
+        const clearBtn = document.getElementById('clear-cart-btn');
+        const navBadge = document.getElementById('nav-cart-badge');
+        const drawerBadge = document.getElementById('drawer-cart-badge');
+
+        if (cartItems.length === 0) {
+          clearBtn.classList.add('hidden');
+          navBadge.classList.add('hidden');
+          drawerBadge.textContent = '0 item';
+          container.innerHTML = `
+            <div class="text-xs text-slate-500 dark:text-slate-400 italic py-2">
+              Belum ada item tambahan di daftar. Klik <strong>"+ Tambah ke Daftar"</strong> jika ingin menggabungkan beberapa paket berbeda.
+            </div>
+          `;
+          return;
+        }
+
+        clearBtn.classList.remove('hidden');
+        navBadge.classList.remove('hidden');
+        navBadge.textContent = cartItems.length;
+        drawerBadge.textContent = `${cartItems.length} item`;
+
+        container.innerHTML = cartItems.map((item, idx) => `
+          <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+            <div>
+              <p class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">${item.name}</p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">${item.qty} ${item.unit} × ${formatRupiah(item.price)}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs sm:text-sm font-extrabold text-teal-600 dark:text-teal-400">${formatRupiah(item.qty * item.price)}</span>
+              <button type="button" data-remove-idx="${idx}" aria-label="Hapus item" class="remove-cart-item-btn p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        lucide.createIcons();
+
+        document.querySelectorAll('.remove-cart-item-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-remove-idx'), 10);
+            const removed = cartItems.splice(idx, 1)[0];
+            showToast(`"${removed.name}" dihapus dari daftar.`, 'info');
+            renderCartItems();
+            updateCalculator();
+          });
+        });
+      }
+
+      function getActiveOrderItems() {
+        if (cartItems.length > 0) {
+          return cartItems;
+        }
+        const pkg = LAUNDRY_PACKAGES.find(p => p.id === selectedPackageId) || LAUNDRY_PACKAGES[0];
+        const qty = Math.max(1, parseInt(document.getElementById('calc-qty-input').value, 10) || 1);
+        return [{
+          pkgId: pkg.id,
+          name: pkg.name,
+          price: pkg.price,
+          unit: pkg.unit,
+          qty: qty
+        }];
+      }
+
+      function updateCalculator() {
+        const pkg = LAUNDRY_PACKAGES.find(p => p.id === selectedPackageId) || LAUNDRY_PACKAGES[0];
+        const qtyInput = document.getElementById('calc-qty-input');
+        const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+
+        // Current single item preview
+        const currentItemTotal = pkg.price * qty;
+        document.getElementById('current-item-formula').textContent = `${qty} ${pkg.unit} × ${formatRupiah(pkg.price)}`;
+        document.getElementById('current-item-subtotal').textContent = formatRupiah(currentItemTotal);
+
+        // Calculate total across active items (either cartItems or current single item)
+        const activeItems = getActiveOrderItems();
+        const subtotal = activeItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+        // Add-ons
+        let addonsTotal = 0;
+        document.querySelectorAll('.addon-checkbox:checked').forEach(cb => {
+          addonsTotal += parseInt(cb.value, 10) || 0;
+        });
+
+        // Shipping / Delivery
+        const deliveryMethod = document.querySelector('input[name="delivery-method"]:checked').value;
+        let shippingFee = 0;
+        let shippingLabel = 'GRATIS';
+        if (deliveryMethod === 'kurir') {
+          if (subtotal >= settings.freeShippingMin) {
+            shippingFee = 0;
+            shippingLabel = 'GRATIS (Min. Order Tercapai)';
+          } else {
+            shippingFee = 5000;
+            shippingLabel = formatRupiah(5000);
+          }
+        } else {
+          shippingFee = 0;
+          shippingLabel = 'GRATIS (Antar ke Outlet)';
+        }
+
+        // Promo Discount
+        let discountAmount = 0;
+        const discountRow = document.getElementById('summary-discount-row');
+        if (activePromo && PROMO_CODES[activePromo]) {
+          const promoObj = PROMO_CODES[activePromo];
+          if (promoObj.type === 'percent') {
+            discountAmount = Math.round((subtotal + addonsTotal) * (promoObj.value / 100));
+          } else {
+            discountAmount = Math.min(subtotal + addonsTotal, promoObj.value);
+          }
+          discountRow.classList.remove('hidden');
+          document.getElementById('summary-promo-label').textContent = activePromo;
+          document.getElementById('summary-discount').textContent = '-' + formatRupiah(discountAmount);
+        } else {
+          discountRow.classList.add('hidden');
+        }
+
+        const grandTotal = Math.max(0, subtotal + addonsTotal + shippingFee - discountAmount);
+
+        // Update Summary UI
+        document.getElementById('summary-item-count').textContent = `${activeItems.length} Paket`;
+        document.getElementById('summary-subtotal').textContent = formatRupiah(subtotal);
+        document.getElementById('summary-addons').textContent = formatRupiah(addonsTotal);
+        document.getElementById('summary-shipping').textContent = shippingLabel;
+        document.getElementById('summary-grand-total').textContent = formatRupiah(grandTotal);
+
+        return {
+          items: activeItems,
+          subtotal,
+          addonsTotal,
+          shippingFee,
+          shippingLabel,
+          discountAmount,
+          grandTotal,
+          deliveryMethod
+        };
+      }
+
+      // Calculator Event Listeners
+      document.getElementById('calc-package-select').addEventListener('change', (e) => {
+        selectPackageForCalculator(e.target.value, false);
+      });
+
+      document.getElementById('calc-qty-input').addEventListener('input', updateCalculator);
+
+      document.getElementById('qty-minus-btn').addEventListener('click', () => {
+        const input = document.getElementById('calc-qty-input');
+        const val = Math.max(1, (parseInt(input.value, 10) || 1) - 1);
+        input.value = val;
+        updateCalculator();
+      });
+
+      document.getElementById('qty-plus-btn').addEventListener('click', () => {
+        const input = document.getElementById('calc-qty-input');
+        const val = Math.min(200, (parseInt(input.value, 10) || 1) + 1);
+        input.value = val;
+        updateCalculator();
+      });
+
+      document.querySelectorAll('.qty-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('calc-qty-input').value = btn.getAttribute('data-preset');
+          updateCalculator();
+        });
+      });
+
+      document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+        const pkg = LAUNDRY_PACKAGES.find(p => p.id === selectedPackageId);
+        const qty = Math.max(1, parseInt(document.getElementById('calc-qty-input').value, 10) || 1);
+        if (!pkg) return;
+
+        const existingIndex = cartItems.findIndex(item => item.pkgId === pkg.id);
+        if (existingIndex > -1) {
+          cartItems[existingIndex].qty += qty;
+        } else {
+          cartItems.push({
+            pkgId: pkg.id,
+            name: pkg.name,
+            price: pkg.price,
+            unit: pkg.unit,
+            qty: qty
+          });
+        }
+
+        renderCartItems();
+        updateCalculator();
+        showToast(`${qty} ${pkg.unit} ${pkg.name} ditambahkan ke daftar cucian!`, 'success');
+      });
+
+      document.getElementById('clear-cart-btn').addEventListener('click', () => {
+        cartItems = [];
+        renderCartItems();
+        updateCalculator();
+        showToast('Daftar cucian dikosongkan.', 'info');
+      });
+
+      document.querySelectorAll('.addon-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateCalculator);
+      });
+
+      document.querySelectorAll('input[name="delivery-method"]').forEach(radio => {
+        radio.addEventListener('change', updateCalculator);
+      });
+
+      // Promo Code Handlers
+      function applyPromoCode() {
+        const input = document.getElementById('promo-code-input');
+        const feedback = document.getElementById('promo-feedback-msg');
+        const code = input.value.trim().toUpperCase();
+
+        if (!code) {
+          activePromo = null;
+          feedback.innerHTML = `<span class="text-rose-500 font-semibold">Masukkan kode promo terlebih dahulu.</span>`;
+          updateCalculator();
+          return;
+        }
+
+        if (PROMO_CODES[code]) {
+          activePromo = code;
+          feedback.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Kode ${code} berhasil diterapkan (${PROMO_CODES[code].label})!</span>`;
+          showToast(`Kode promo ${code} berhasil digunakan!`, 'success');
+        } else {
+          activePromo = null;
+          feedback.innerHTML = `<span class="text-rose-500 font-semibold">✕ Kode "${code}" tidak valid. Coba HEMAT10 atau BARU5000.</span>`;
+          showToast('Kode promo tidak ditemukan.', 'error');
+        }
+        updateCalculator();
+      }
+
+      document.getElementById('apply-promo-btn').addEventListener('click', applyPromoCode);
+      document.querySelectorAll('.quick-promo-fill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('promo-code-input').value = btn.getAttribute('data-code');
+          applyPromoCode();
+        });
+      });
+
+      // 7. CHECKOUT FORM & WHATSAPP INTEGRATION
+      document.getElementById('checkout-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const custName = document.getElementById('cust-name').value.trim();
+        const custPhone = document.getElementById('cust-phone').value.trim();
+        const custSchedule = document.getElementById('cust-schedule').value;
+        const custAddress = document.getElementById('cust-address').value.trim();
+        const custNotes = document.getElementById('cust-notes').value.trim();
+
+        if (!custName || !custPhone || !custAddress) {
+          showToast('Harap lengkapi Nama, Nomor WhatsApp, dan Alamat Anda.', 'error');
+          return;
+        }
+
+        const calcData = updateCalculator();
+        const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+        lastCreatedOrderId = orderId;
+
+        // Selected Add-ons text
+        const selectedAddons = [];
+        if (document.getElementById('addon-parfum').checked) selectedAddons.push('Parfum Sakura (+Rp 3.000)');
+        if (document.getElementById('addon-softener').checked) selectedAddons.push('Pelembut Ekstra (+Rp 2.000)');
+
+        const itemsListText = calcData.items
+          .map((item, i) => `${i + 1}. ${item.name} (${item.qty} ${item.unit}) = ${formatRupiah(item.qty * item.price)}`)
+          .join('\n');
+
+        const receiptText = [
+          `*PESANAN BARU - ${settings.brandName.toUpperCase()}*`,
+          `ID Order: *${orderId}*`,
+          `--------------------------------`,
+          `Nama: ${custName}`,
+          `No. HP: ${custPhone}`,
+          `Metode: ${calcData.deliveryMethod === 'kurir' ? 'Antar-Jemput Kurir' : 'Antar Sendiri ke Outlet'}`,
+          `Jadwal: ${custSchedule}`,
+          `Alamat: ${custAddress}`,
+          custNotes ? `Catatan: ${custNotes}` : null,
+          `--------------------------------`,
+          `*Rincian Cucian:*`,
+          itemsListText,
+          selectedAddons.length ? `Add-on: ${selectedAddons.join(', ')}` : null,
+          `Subtotal: ${formatRupiah(calcData.subtotal + calcData.addonsTotal)}`,
+          `Ongkir: ${calcData.shippingLabel}`,
+          calcData.discountAmount > 0 ? `Diskon (${activePromo}): -${formatRupiah(calcData.discountAmount)}` : null,
+          `*TOTAL ESTIMASI: ${formatRupiah(calcData.grandTotal)}*`,
+          `--------------------------------`,
+          `Mohon segera diproses ya Admin! Terima kasih.`
+        ].filter(Boolean).join('\n');
+
+        lastCreatedReceiptText = receiptText;
+
+        // Save order to localStorage for Order Tracker
+        savedOrders[orderId] = {
+          id: orderId,
+          customerName: custName,
+          itemsSummary: calcData.items.map(i => `${i.name} (${i.qty} ${i.unit})`).join(', '),
+          total: calcData.grandTotal,
+          step: 0,
+          updatedAt: 'Baru saja dibuat'
+        };
+        localStorage.setItem('klinpro_orders', JSON.stringify(savedOrders));
+        renderSampleOrderPills();
+
+        // Build WhatsApp URL
+        const cleanAdminWa = settings.waNumber.replace(/[^0-9]/g, '');
+        const waUrl = `https://wa.me/${cleanAdminWa}?text=${encodeURIComponent(receiptText)}`;
+
+        // Populate & Show Receipt Modal
+        document.getElementById('digital-receipt-preview').innerHTML = receiptText.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+        document.getElementById('reopen-wa-link').href = waUrl;
+        const receiptModal = document.getElementById('receipt-modal');
+        receiptModal.classList.remove('hidden');
+        receiptModal.classList.add('flex');
+
+        showToast(`Order ${orderId} berhasil dibuat! Membuka WhatsApp...`, 'success');
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      });
+
+      // Receipt Modal Actions
+      document.getElementById('copy-receipt-btn').addEventListener('click', () => {
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = lastCreatedReceiptText;
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextarea);
+        showToast('Struk pesanan berhasil disalin ke clipboard!', 'success');
+      });
+
+      document.getElementById('track-created-order-btn').addEventListener('click', () => {
+        const receiptModal = document.getElementById('receipt-modal');
+        receiptModal.classList.add('hidden');
+        receiptModal.classList.remove('flex');
+        document.getElementById('track-order-input').value = lastCreatedOrderId;
+        renderOrderTracking(lastCreatedOrderId);
+        document.getElementById('lacak').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.getElementById('close-receipt-modal-btn').addEventListener('click', () => {
+        const receiptModal = document.getElementById('receipt-modal');
+        receiptModal.classList.add('hidden');
+        receiptModal.classList.remove('flex');
+      });
+
+      // 8. ORDER TRACKER LOGIC
+      function renderSampleOrderPills() {
+        const bar = document.getElementById('sample-orders-bar');
+        const keys = Object.keys(savedOrders).slice(-4);
+        bar.innerHTML = `<span>ID Order Tersedia:</span>` + keys.map(id => `
+          <button type="button" data-order-id="${id}" class="sample-track-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-teal-600 dark:text-teal-400 hover:border-teal-500 transition-colors">${id}</button>
+        `).join('');
+
+        document.querySelectorAll('.sample-track-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-order-id');
+            document.getElementById('track-order-input').value = id;
+            renderOrderTracking(id);
+          });
+        });
+      }
+
+      function renderOrderTracking(orderIdInput) {
+        const cleanId = orderIdInput.trim().toUpperCase();
+        const container = document.getElementById('track-result-container');
+        container.classList.remove('hidden');
+
+        const order = savedOrders[cleanId];
+        if (!order) {
+          container.innerHTML = `
+            <div class="p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-center">
+              <p class="text-sm font-bold text-rose-700 dark:text-rose-300">ID Order "${cleanId}" tidak ditemukan.</p>
+              <p class="text-xs text-rose-600 dark:text-rose-400 mt-1">Pastikan kode yang dimasukkan benar atau coba klik salah satu ID Order contoh di atas.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const steps = [
+          { title: 'Penjemputan / Diterima', desc: 'Kurir menjemput / cucian diterima di outlet', icon: 'truck' },
+          { title: 'Proses Pencucian', desc: 'Dicuci higienis (1 mesin 1 pelanggan)', icon: 'washing-machine' },
+          { title: 'Setrika & Packing', desc: 'Setrika uap rapi & pemberian parfum', icon: 'sparkles' },
+          { title: 'Siap Diantar / Selesai', desc: 'Cucian bersih siap dikirim ke alamat Anda', icon: 'check-circle-2' }
+        ];
+
+        container.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 mb-6 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-extrabold">${order.id}</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Update: ${order.updatedAt}</span>
+              </div>
+              <h4 class="text-base font-extrabold text-slate-900 dark:text-white mt-1.5">Pelanggan: ${order.customerName}</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">${order.itemsSummary}</p>
+            </div>
+            <div class="sm:text-right">
+              <span class="text-xs text-slate-500 dark:text-slate-400 block">Total Biaya</span>
+              <span class="text-lg font-extrabold text-teal-600 dark:text-teal-400">${formatRupiah(order.total)}</span>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-4 gap-4">
+            ${steps.map((s, idx) => {
+              const isCompleted = idx <= order.step;
+              const isCurrent = idx === order.step;
+              return `
+                <div class="p-4 rounded-2xl border ${isCurrent ? 'border-teal-500 bg-teal-50/70 dark:bg-teal-950/40' : isCompleted ? 'border-emerald-200 dark:border-emerald-800/60 bg-white dark:bg-slate-800/50' : 'border-slate-200 dark:border-slate-800 opacity-55'}">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="w-8 h-8 rounded-xl ${isCompleted ? 'bg-teal-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'} flex items-center justify-center">
+                      <i data-lucide="${s.icon}" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-[11px] font-bold ${isCompleted ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'}">Tahap ${idx + 1}</span>
+                  </div>
+                  <h5 class="text-xs font-extrabold text-slate-900 dark:text-white">${s.title}</h5>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">${s.desc}</p>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        lucide.createIcons();
+      }
+
+      document.getElementById('track-order-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = document.getElementById('track-order-input').value;
+        if (!val.trim()) {
+          showToast('Masukkan ID Order terlebih dahulu.', 'error');
+          return;
+        }
+        renderOrderTracking(val);
+      });
+
+      // 9. HAMBURGER DRAWER CONTROLS
+      const mobileDrawer = document.getElementById('mobile-drawer');
+      const mobileBackdrop = document.getElementById('mobile-drawer-backdrop');
+
+      function openMobileDrawer() {
+        mobileBackdrop.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          mobileBackdrop.classList.remove('opacity-0');
+          mobileDrawer.classList.remove('translate-x-full');
+        });
+      }
+
+      function closeMobileDrawer() {
+        mobileBackdrop.classList.add('opacity-0');
+        mobileDrawer.classList.add('translate-x-full');
+        setTimeout(() => {
+          mobileBackdrop.classList.add('hidden');
+        }, 300);
+      }
+
+      document.getElementById('open-mobile-menu-btn').addEventListener('click', openMobileDrawer);
+      document.getElementById('close-mobile-menu-btn').addEventListener('click', closeMobileDrawer);
+      mobileBackdrop.addEventListener('click', closeMobileDrawer);
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', closeMobileDrawer);
+      });
+
+      // 10. SETTINGS MODAL CONTROLS
+      const settingsModal = document.getElementById('settings-modal');
+
+      function openSettingsModal() {
+        closeMobileDrawer();
+        settingsModal.classList.remove('hidden');
+        settingsModal.classList.add('flex');
+      }
+
+      function closeSettingsModal() {
+        settingsModal.classList.add('hidden');
+        settingsModal.classList.remove('flex');
+      }
+
+      document.getElementById('open-settings-btn').addEventListener('click', openSettingsModal);
+      document.getElementById('drawer-open-settings-btn').addEventListener('click', openSettingsModal);
+      document.getElementById('close-settings-btn').addEventListener('click', closeSettingsModal);
+      document.getElementById('cancel-settings-btn').addEventListener('click', closeSettingsModal);
+
+      // Live toggle dark mode preview inside modal
+      document.getElementById('setting-dark-mode').addEventListener('change', (e) => {
+        settings.darkMode = e.target.checked;
+        applySettingsToUI();
+      });
+
+      document.getElementById('save-settings-btn').addEventListener('click', () => {
+        const newName = document.getElementById('setting-brand-name').value.trim();
+        const newWa = document.getElementById('setting-wa-number').value.trim().replace(/[^0-9]/g, '');
+        const newFreeShip = Math.max(0, parseInt(document.getElementById('setting-free-shipping').value, 10) || 0);
+
+        settings.brandName = newName || DEFAULT_SETTINGS.brandName;
+        settings.waNumber = newWa || DEFAULT_SETTINGS.waNumber;
+        settings.freeShippingMin = newFreeShip;
+        settings.darkMode = document.getElementById('setting-dark-mode').checked;
+        settings.toastEnabled = document.getElementById('setting-toast-enabled').checked;
+
+        localStorage.setItem('klinpro_settings', JSON.stringify(settings));
+        applySettingsToUI();
+        closeSettingsModal();
+        showToast('Pengaturan berhasil disimpan & diterapkan!', 'success');
+      });
+
+      document.getElementById('reset-settings-btn').addEventListener('click', () => {
+        settings = { ...DEFAULT_SETTINGS };
+        localStorage.setItem('klinpro_settings', JSON.stringify(settings));
+        applySettingsToUI();
+        showToast('Pengaturan dikembalikan ke default.', 'info');
+      });
+
+      // 11. FAQ ACCORDION, DIRECT WA CS & BACK TO TOP
+      document.querySelectorAll('.faq-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const content = trigger.nextElementSibling;
+          const icon = trigger.querySelector('i');
+          const isOpen = !content.classList.contains('hidden');
+
+          document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+          document.querySelectorAll('.faq-trigger i').forEach(i => i.classList.remove('rotate-180'));
+
+          if (!isOpen) {
+            content.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+          }
+        });
+      });
+
+      document.getElementById('direct-wa-cs-btn').addEventListener('click', () => {
+        const cleanWa = settings.waNumber.replace(/[^0-9]/g, '');
+        const msg = encodeURIComponent(`Halo Admin ${settings.brandName}, saya ingin bertanya mengenai layanan laundry.`);
+        window.open(`https://wa.me/${cleanWa}?text=${msg}`, '_blank', 'noopener,noreferrer');
+      });
+
+      document.getElementById('back-to-top-btn').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      // 12. INITIAL BOOTSTRAP
+      populatePackageDropdown();
+      renderPackages();
+      renderCartItems();
+      renderSampleOrderPills();
+      applySettingsToUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>                       
